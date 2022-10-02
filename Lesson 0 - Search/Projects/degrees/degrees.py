@@ -92,9 +92,58 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # TODO
-    raise NotImplementedError
+    # remember inspected persons
+    inspected = []
 
+    # We use queue to find the shortest possible path
+    frontier = QueueFrontier()
+
+    # We start with the source
+    frontier.add(Node(source, None, None))
+
+    # Repeat:
+    while True:
+
+        # If frontier is empty, there is no solution
+        if frontier.empty():
+            return None
+        
+        # Remove Node from Frontier
+        node = frontier.remove()
+        
+        # Check if Node is solution
+        if node.state == target:
+            return buildSolution(node)
+        
+        # No solution yet, continue searching
+        else:
+            # For every node reachable from this node
+            for movie_id, person_id in neighbors_for_person(node.state):
+                # Add only not-already inspected
+                next_node = Node(person_id, node, movie_id)
+                if person_id == target:
+                    return buildSolution(next_node)
+                elif person_id not in inspected:
+                    # Add Node to frontier
+                    frontier.add(next_node)
+                    # Add neighbor to inspected
+                    inspected.append(person_id)
+
+def buildSolution(node):
+    # Start with empty Solution
+    solution = []
+    # as long as we did not reach the start
+    while node.parent:
+        # Append node to solution
+        solution.append((node.action, node.state))
+        # Next (aka previous) node is the parent
+        node = node.parent
+
+    # Reverse the solution
+    solution.reverse()
+
+    # Return the solution
+    return solution
 
 def person_id_for_name(name):
     """
