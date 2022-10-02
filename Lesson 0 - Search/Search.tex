@@ -1,0 +1,55 @@
+\section{Suchprobleme}
+
+Suchprobleme beinhalten einen Agenten, einen Anfangszustand und einen Zielzustand. Der Agent gibt eine Lösung zurück, wie man vom ersteren zum letzteren gelangt. Ein in diesem Sinne typisches Suchproblem ist es den Weg durch ein Labyrinth zu finden.
+
+\subsection{Fachbegriffe}
+ 
+\begin{description}
+ \item [Agent] Eine Entität, die ihre Umgebung wahrnimmt und auf diese Umgebung einwirkt. In einer Navigations-App beispielsweise das Auto.
+
+ \item [Zustand ($s$)] Eine Konfiguration des Agenten in seiner Umgebung. Etwa die Position in einem Labyrinth
+
+ \item [Ausgangszustand ($s_0$)] Der Zustand, von dem aus der Suchalgorithmus startet. 
+
+ \item [Aktionen] Erlaubte Entscheidungen, die in einem Zustand getroffen werden können. 
+    
+    \begin{equation}
+     A = f(s)
+    \end{equation}
+    
+    In einem Labyrinth also das Bewegen in jede Richtung, die nicht von einer Wand blockiert wird.
+    
+ \item [Übergangsmodell $T$] Eine Beschreibung, welcher Zustand sich aus der Durchführung einer anwendbaren Aktion in einem beliebigen Zustand ergibt
+
+    \begin{equation}
+     s = f(s, a) \text{~wobei~} a \in A
+    \end{equation}
+
+ \item [Zustandsraum] Die Menge aller Zustände, die vom Anfangszustand aus durch eine beliebige Abfolge von Aktionen erreichbar sind
+ 
+ \item [Zieltest] Die Bedingung, die bestimmt, ob ein bestimmter Zustand ein Zielzustand ist.\\
+ Wenn ja: Problem gelöst. \\
+ Wenn nicht: weiter suchen
+
+ \item [Pfadkosten] Einem gegebenen Pfad zugeordnete numerische Kosten
+\end{description}
+
+\subsection{Allgemeine Lösung um Suchprobleme zu lösen}
+
+\begin{description}
+ \item [Lösung] Eine Abfolge von Aktionen, die vom Anfangszustand zu einem Zielzustand führt
+ \item [Optimale Lösung] Die Lösung mit den niedrigsten Pfadkosten unter allen Lösungen
+ \item [Knoten] Datenstruktur mit folgenden Daten:
+      \begin{itemize}
+      \item Vorgänger, vorherige Knoten
+      \item Zustand
+      \item Aktion, die zu diesem Zustand geführt hat
+      \item Pfadkosten vom Anfangszustand zu diesem Knoten
+      \end{itemize}
+   Knoten enthalten Informationen, die sie für Suchalgorithmen sehr nützlich machen. Sie enthalten einen Zustand, der mit dem Zieltest überprüft werden kann, ob es sich um den Endzustand handelt. Wenn dies der Fall ist, können die Pfadkosten des Knotens mit den Pfadkosten anderer Knoten verglichen werden, was die Auswahl der optimalen Lösung ermöglicht.
+
+   Sobald der Knoten ausgewählt ist, ist es aufgrund der Speicherung des Elternknotens und der Aktion, die vom Elternknoten zum aktuellen Knoten geführt hat, möglich, jeden Schritt des Weges vom Anfangszustand zu diesem Knoten und dieser Aktionsfolge zurückzuverfolgen ist die Lösung.
+\end{description}
+
+
+
