@@ -32,11 +32,7 @@ Suchprobleme beinhalten einen Agenten, einen Anfangszustand und einen Zielzustan
  Wenn nicht: weiter suchen
 
  \item [Pfadkosten] Einem gegebenen Pfad zugeordnete numerische Kosten
-\end{description}
 
-\subsection{Allgemeine Lösung um Suchprobleme zu lösen}
-
-\begin{description}
  \item [Lösung] Eine Abfolge von Aktionen, die vom Anfangszustand zu einem Zielzustand führt
  \item [Optimale Lösung] Die Lösung mit den niedrigsten Pfadkosten unter allen Lösungen
  \item [Knoten] Datenstruktur mit folgenden Daten:
@@ -46,10 +42,104 @@ Suchprobleme beinhalten einen Agenten, einen Anfangszustand und einen Zielzustan
       \item Aktion, die zu diesem Zustand geführt hat
       \item Pfadkosten vom Anfangszustand zu diesem Knoten
       \end{itemize}
-   Knoten enthalten Informationen, die sie für Suchalgorithmen sehr nützlich machen. Sie enthalten einen Zustand, der mit dem Zieltest überprüft werden kann, ob es sich um den Endzustand handelt. Wenn dies der Fall ist, können die Pfadkosten des Knotens mit den Pfadkosten anderer Knoten verglichen werden, was die Auswahl der optimalen Lösung ermöglicht.
 
-   Sobald der Knoten ausgewählt ist, ist es aufgrund der Speicherung des Elternknotens und der Aktion, die vom Elternknoten zum aktuellen Knoten geführt hat, möglich, jeden Schritt des Weges vom Anfangszustand zu diesem Knoten und dieser Aktionsfolge zurückzuverfolgen ist die Lösung.
+      Aufgrund der Pfadkosten kann aus allen möglichen Lösungen die \enquote{günstigste} ausgewählt werden. Auch ist der Weg zum Anfangsknoten immer nachvollziehbar.
+
+ \item [Grenzraum] Der Grenzraum enthält zunächst nur den Anfangszustand. Hinzu kommen alle Aktionen die von diesem Zustand aus erreichbar sind und noch nicht darauf hin untersucht wurden, ob sie eine Lösung darstellen. Ist der Grenzraum leer, gibt es keine Lösung. Algorithmisch
+ \begin{lstlisting}
+  Wiederhole:
+   Wenn der Grenzraum leer ist:
+      Halt! (Es gibt keine Lösung)
+   
+   Entferne einen Knoten aus dem Grenzraum
+   
+   Wenn dieser Knoten die Lösung enthält:
+      Gib diesen Knoten zurück
+   Sonst:
+      Füge alle Knoten, die von diesem Knoten aus erreichbar sind dem Grenzraum hinzu
+      Füge den diesen Knoten den untersuchten Knoten hinzu
+ \end{lstlisting}
+
 \end{description}
 
+Es gibt zwei Wege um den Grenzraum zu verwalten:
 
+\subsection{Als Stapel (Tiefensuche, Deep-First-Search)}
 
+Wird der Grenzraum als Stapel (Stack) verstanden, handelt es sich um eine Tiefensuche. Diese erschöpft jede Richtung, bevor eine andere Richtung versucht wird (last-in first-out, LIFO)
+
+\textbf{Vorteile}
+\begin{itemize}
+ \item Kann zufälligerweise der schnellste Algorithmus sein
+\end{itemize}
+
+\textbf{Nachteile}
+\begin{itemize}
+ \item Kann zufälligerweise der langstamste Algorithmus sein
+ \item Es ist möglich, dass die gefundene Lösung nicht optimal ist
+\end{itemize}
+% \lstset{language=Python}
+% \begin{lstlisting}
+% #Removes an element from the stack and returns it.
+% class Stack():
+%    ...
+%    
+%    def remove(self):
+%       # Exception if stack is empty
+%       if self.empty():
+%          raise Exception("Stack is empty")
+%       else:
+%          # Save the last (= newest) element
+%          element = self.elements[-1]
+%          # remove the last element
+%          self.elements = self.elements[:-1]
+%          return element
+% \end{lstlisting}
+
+\subsection{Als Warteschlange (Breitensuche, Breadth-First-Search)}
+
+Wird der Grenzraum als Warteschlange (Queue) verstanden, handelt es sich um eine Breitensuche. Diese macht jeweils einen Schritt in jede mögliche Richtung, bevor es den nächsten Schritt in eine bestimmte Richtung macht (first-in first-out, FIFO)
+
+\textbf{Vorteile}
+\begin{itemize}
+ \item Dieser Algorithmus findet garantiert die optimale Lösung
+\end{itemize}
+
+\textbf{Nachteile}
+\begin{itemize}
+ \item Dieser Algorithmus dauert fast garantiert länger als die minimale Ausführungszeit
+ \item Im schlimmsten Fall benötigt dieser Algorithmus die längstmögliche Laufzeit.
+\end{itemize}
+
+% \lstset{language=Python}
+% \begin{lstlisting}
+% #Removes an element from the stack and returns it.
+% class Queue():
+%    ...
+%    
+%    def remove(self):
+%       # Exception if stack is empty
+%       if self.empty():
+%          raise Exception("Stack is empty")
+%       else:
+%          # Save the first (= oldest) element
+%          element = self.elements[0]
+%          # remove the oldest element
+%          self.elements = self.elements[1:]
+%          return element
+% \end{lstlisting}
+
+\subsection{Optimierte Suche: Gierige Beste-Zuerst-Suche (Greedy Best-First Search)}
+Breiten- und Tiefensuche sind beides uninformierte Suchalgorithmen. Das heißt, diese Algorithmen verwenden kein Wissen über das Problem, das sie nicht durch ihre eigene Untersuchung erworben haben. 
+
+Die gierige Best-First-Suche schätzt aufgrund heuristische Funktion $h(n)$ welcher Knoten als nächstes untersucht werden soll. Die Effizienz des Greedy-Best-First-Algorithmus hängt davon ab, wie gut die heuristische Funktion ist. In einem Labyrinth könnte diese heuristische Funktion die Manhatten-Distanz zum Ziel sein ($|x - x_z| + |y - y_z|$)
+
+\subsection{A* Suche}
+Als Weiterentwicklung des Greedy-Best-First-Algorithmus berücksichtigt die A*-Suche nicht nur $h(n)$, die geschätzten Kosten vom aktuellen Standort zum Ziel, sondern auch $g(n)$, die bis zum aktuellen Standort angefallenen Kosten, also die Gesamtkosten ($c(n) = g(n) + h(n)$. Sobald $c(n) > c(n_{n-1})$ verlässt der Algorithmus den aktuellen Pfad kehrt zur vorherigen Option zurück, wodurch er sich selbst daran hindert einen langen, ineffizienten Weg gehen, den $h(n)$ fälschlicherweise als besten markiert hat.
+
+Damit die A*-Suche optimal ist, muss für die heuristische Funktion h(n) gelten:
+\begin{itemize}
+ \item sie ist zulässig und überschätzt niemals die wahren Kosten
+ \item sie ist konsistent, also muss jeden Knoten $n$ und dessen Folgeknoten $n'$ gelten $h(n) + g(n) \leq h(n') + g(n')$
+
+\end{itemize}
