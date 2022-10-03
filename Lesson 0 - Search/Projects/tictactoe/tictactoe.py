@@ -59,28 +59,36 @@ def result(board, action):
     return board
     #raise NotImplementedError
 
-
 def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
+
     for row in range(0, 2):
-        if board[row][0] is not EMPTY and (board[row][0] == board[row][1] == board[row][2]):
+        if board[row][0] is not EMPTY \
+            and board[row][0] == board[row][1] \
+            and board[row][0] == board[row][2]:
             print("Three in a row")
             return board[row][0]
     
     for col in range(0, 2):
-        if board[0][col] is not EMPTY and (board[0][col] == board[0][col] == board[0][col]):
+        if board[0][col] is not EMPTY \
+            and board[0][col] == board[1][col] \
+            and board[0][col] == board[2][col]:
             print("Three in a col")
             return board[0][col]
 
-    if board[0][0] is not EMPTY and (board[0][0] == board[1][1] == board[2][2]):
+    if board[0][0] is not EMPTY \
+        and board[0][0] == board[1][1] \
+        and board[0][0] == board[2][2]:
         print("Diagonal 1")
         return board[0][0]
 
-    if board[2][0] is not EMPTY and (board[2][0] == board[1][1] == board[0][2]):
+    if board[2][0] is not EMPTY \
+        and board[2][0] == board[1][1] \
+        and board[2][0] == board[0][2]:
         print("Diagonal 2")
-        return board[0][0]
+        return board[2][0]
 
     return None
     #raise NotImplementedError
