@@ -43,8 +43,8 @@ def actions(board):
     """
     actions = []
     i = 0
-    for row in range(0, 2):
-        for col in range(0, 2):
+    for row in range(0, len(board)):
+        for col in range(0, len(board)):
             if board[row][col] is EMPTY:
                 actions.append((row, col))
     return actions
@@ -63,32 +63,27 @@ def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-
-    for row in range(0, 2):
+    for row in range(0, len(board)):
         if board[row][0] is not EMPTY \
             and board[row][0] == board[row][1] \
             and board[row][0] == board[row][2]:
-            print("Three in a row")
-            return board[row][0]
-    
-    for col in range(0, 2):
+                return board[row][0]
+
+    for col in range(0, len(board)):
         if board[0][col] is not EMPTY \
             and board[0][col] == board[1][col] \
             and board[0][col] == board[2][col]:
-            print("Three in a col")
-            return board[0][col]
+                return board[0][col]
 
     if board[0][0] is not EMPTY \
         and board[0][0] == board[1][1] \
         and board[0][0] == board[2][2]:
-        print("Diagonal 1")
-        return board[0][0]
+            return board[0][0]
 
     if board[2][0] is not EMPTY \
         and board[2][0] == board[1][1] \
         and board[2][0] == board[0][2]:
-        print("Diagonal 2")
-        return board[2][0]
+            return board[2][0]
 
     return None
     #raise NotImplementedError
@@ -98,10 +93,18 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    for row in range(0, 2):
-        for col in range(0, 2):
+
+    # Game is over if there is a winner
+    if winner(board):
+        return True
+
+    # Game is not over if there is no winner and at least an empty field
+    for row in range(0, len(board)):
+        for col in range(0, len(board)):
             if board[row][col] is EMPTY:
                 return False
+
+    # No winner and no fields left thus, the game is over.
     return True
     #raise NotImplementedError
 
@@ -110,10 +113,10 @@ def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    winner = winner(board)
-    if winner == X:
+    outcome = winner(board)
+    if outcome == X:
         return 1
-    elif winner == O:
+    elif outcome == O:
         return -1
     else:
         return 0
