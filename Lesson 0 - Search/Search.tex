@@ -143,3 +143,22 @@ Damit die A*-Suche optimal ist, muss für die heuristische Funktion h(n) gelten:
  \item sie ist konsistent, also muss jeden Knoten $n$ und dessen Folgeknoten $n'$ gelten $h(n) + g(n) \leq h(n') + g(n')$
 
 \end{itemize}
+
+\subsection{Gegnerische Suche}
+
+
+\subsubsection{Minimax}
+Minimax ist eine Art Algorithmus in der gegnerischen Suche und stellt Gewinnbedingungen als (-1) für eine Seite und (+1) für die andere Seite dar. Die minimierende Seite versucht, die niedrigste Punktzahl zu erzielen, und die maximierende Seite versucht, die höchste Punktzahl zu erzielen.
+
+\begin{description}
+ \item [$s_0$] Anfangszustand (in unserem Fall ein leeres 3X3-Board)
+ \item [Spieler] eine Funktion, die bei einem Zustand s zurückgibt, welcher Spieler an der Reihe ist
+ \item [Aktionen] eine Funktion, die bei gegebenem Zustand $s$ alle legalen Züge in diesem Zustand zurückgibt
+ \item [Ergebnis] eine Funktion, die bei einem Zustand $s$ und einer Aktion $a$ einen neuen Zustand zurückgibt. Dies ist das Brett, das aus der Ausführung der Aktion $a$ im Zustand $s$ (einen Zug im Spiel machen) resultiert.
+ \item[Terminal] eine Funktion, die bei einem Zustand $s$ überprüft, ob dies der letzte Schritt im Spiel ist, d.h. ob jemand gewonnen hat oder es ein Unentschieden gibt. Gibt True zurück, wenn das Spiel beendet ist, andernfalls False.
+ \item[Utility(s)] eine Funktion, die bei einem Endzustand $s$ den Utility-Wert des Zustands zurückgibt: -1, 0 oder 1.
+\end{description}
+
+
+
+Rekursiv simuliert der Algorithmus alle möglichen Spiele, die ab dem aktuellen Zustand stattfinden können, bis ein Endzustand erreicht ist. Jeder Endzustand wird entweder als (-1), 0 oder (+1) bewertet.

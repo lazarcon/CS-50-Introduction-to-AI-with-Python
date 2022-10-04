@@ -127,6 +127,51 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
+    """
+        - The maximizing player picks action a in Actions(s) that produces the highest value of Min-Value(Result(s, a)).
+        - The minimizing player picks action a in Actions(s) that produces the lowest value of Max-Value(Result(s, a)).
+    """
+    if player(board) == X:
+        actions = actions(board)
+
+    #raise NotImplementedError
+
+def max_value(board):
+    # v = -∞
+    v = -99
+    
+    # if Terminal(state):
+    if terminal(board):
+        #return Utility(state)
+        return utility(board)
+
+    #for action in Actions(state):
+    for action in actions(board):
+        #v = Max(v, Min-Value(Result(state, action)))
+        v = max(v, min_value(result(board, action)))
+    #return v
+    return v
+
+def min_value(board):
+    # v = -∞
+    v = 99
+
+    # if Terminal(state):
+    if terminal(board):
+        #return Utility(state)
+        return utility(board)
+
+    #for action in Actions(state):
+    for action in actions(board):
+        #v = Min(v, Max-Value(Result(state, action)))
+        v = min(v, max_value(result(board, action)))
+    #return v
+    return v
+
+def dummy(board):
+    """
+    Returns the optimal action for the current player on the board.
+    """
     moves = actions(board)
     return moves[random.randrange(0, len(moves))]
     #raise NotImplementedError
